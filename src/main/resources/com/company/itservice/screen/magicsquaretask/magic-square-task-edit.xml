@@ -28,9 +28,9 @@
         <form id="form" dataContainer="magicSquareTaskDc">
             <column width="350px">
                 <dateField id="dateField" property="date"/>
-                <textArea id="inputValueField" property="inputValue" rows="3"/>
-                <textArea id="outputValueField" property="outputValue" rows="3"/>
-                <textField id="resultField" property="result"/>
+                <textArea id="inputValueField" property="inputValue" rows="2"/>
+                <textArea id="outputValueField" property="outputValue" rows="2"/>
+                <textArea id="resultField" property="result" rows = "2"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

@@ -1,16 +1,16 @@
 package com.company.itservice.app;
 
 class MagicSquaresContainer {
-    private final int[][] magics = new int[32][9];
+    private final int[][] magics = new int[32][9];  // Все полумагические квадраты
 
-    private final int[][] baseMagics = {
+    private final int[][] baseMagics = {            // Базовые магические квадраты
             {4, 9, 2, 3, 5, 7, 8, 1, 6},
             {2, 7, 6, 9, 5, 1, 4, 3, 8},
             {6, 1, 8, 7, 5, 3, 2, 9, 4},
             {8, 3, 4, 1, 5, 9, 6, 7, 2}
     };
 
-    private final int[][] fullMagics = new int[12][9];
+    private final int[][] fullMagics = new int[12][9]; // Все магические квадраты
 
     public MagicSquaresContainer() {
         // Формируем все магические квадраты из базовых + перестановки верх/низ и право/лево
@@ -43,7 +43,6 @@ class MagicSquaresContainer {
         copyMagicColumn(fullMagics[indexMagic], magics[++inbexFirstHalfMagic], 2, 1);
         return ++inbexFirstHalfMagic;
     }
-
 
     private void copyMagic(int[] srcMagic, int[] dstMagic) {
         System.arraycopy(srcMagic, 0, dstMagic, 0, 9);

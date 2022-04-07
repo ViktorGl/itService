@@ -28,14 +28,18 @@
         <form id="form" dataContainer="subStringTaskDc">
             <column width="600px">
                 <dateField id="dateField" property="date"/>
-                <textArea id="subStringsField" property="subStrings" rows="2"/>
-                <textArea id="cmpStringsField" property="cmpStrings" rows="2"/>
+                <textArea  id="subStringsField" property="subStrings" rows="2"/>
+                <textArea  id="cmpStringsField" property="cmpStrings" rows="2"/>
+                <textField id="resultField" property="resultString"/>
              </column>
         </form>
         <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
             <button id="closeBtn" action="windowClose"/>
             <button id="calcBtn" caption="msg://calculate"/>
+            <fileStorageUpload id="dataFileField" property="dataFile"
+                               showFileName="false" showClearButton="false"/>
+            <button id="btnDownload" caption="Download"/>
         </hbox>
     </layout>
 </window>
