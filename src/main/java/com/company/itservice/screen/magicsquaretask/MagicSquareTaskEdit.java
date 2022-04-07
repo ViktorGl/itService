@@ -1,17 +1,19 @@
 package com.company.itservice.screen.magicsquaretask;
 
-//import com.company.itservice.app.MagicSquareService;
 import com.company.itservice.app.MagicSquareService;
 import com.company.itservice.entity.MagicSquareTask;
 import io.jmix.ui.Dialogs;
 import io.jmix.ui.Notifications;
 import io.jmix.ui.UiComponents;
 import io.jmix.ui.component.*;
+import io.jmix.ui.download.Downloader;
 import io.jmix.ui.screen.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +38,23 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
     private Dialogs dialogs;
     @Autowired
     protected UiComponents uiComponents;
+    @Autowired
+    private Downloader downloader;
 
     @Subscribe("dataFileField")
     public void onDataFileFieldFileUploadSucceed(SingleFileUploadField.FileUploadSucceedEvent event) {
         InputStream fileContent = dataFileField.getFileContent();
+        String text;
+        try {
+            text = new String(fileContent.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new IllegalStateException("Ошибка чтения файла!");
+        }
+        notifications.create()
+                .withCaption("File content")
+                .withDescription(text)
+                .show();
+
     }
 
     @Subscribe
@@ -83,22 +98,8 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
 
     @Subscribe("btnDownload")
     public void onBtnDownloadClick(Button.ClickEvent event) {
-        
+        byte[] testOut = "wewewe".getBytes();
+        downloader.download(testOut, "test.txt");
     }
-
-//    @Subscribe("btnDownload")
-//    public void onBtnDownloadClick(Button.ClickEvent event) {
-//        dialogs.createInputDialog(this)
-//                .withParameter(InputParameter.parameter("file")
-//                        .withField(() -> {
-//                            FileUploadField field = uiComponents.create(FileUploadField.class);
-//                            field.setContentProvider(() -> null);
-//                            field.setEditable(false);
-//                            return field;
-//                        })
-//                ).show();
-//    }
-
-
 
 }

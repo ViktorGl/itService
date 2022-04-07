@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        xmlns:c="http://jmix.io/schema/ui/jpql-condition"
+        caption="msg://subStringTaskBrowse.caption"
+        focusComponent="subStringTasksTable">
+    <data readOnly="true">
+        <collection id="subStringTasksDc"
+                    class="com.company.itservice.entity.SubStringTask">
+            <fetchPlan extends="_base"/>
+            <loader id="subStringTasksDl">
+                <query>
+                    <![CDATA[select e from SubStringTask e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <screenSettings id="settingsFacet" auto="true"/>
+    </facets>
+    <actions>
+        <action id="lookupSelectAction"
+                caption="msg:///actions.Select"
+                icon="LOOKUP_OK"
+                primary="true"
+                shortcut="${COMMIT_SHORTCUT}"/>
+        <action id="lookupCancelAction"
+                caption="msg:///actions.Cancel"
+                icon="LOOKUP_CANCEL"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="subStringTasksTable" spacing="true">
+        <filter id="filter"
+                dataLoader="subStringTasksDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="subStringTasksTable"
+                    width="100%"
+                    dataContainer="subStringTasksDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="date"/>
+                <column id="subStrings"/>
+                <column id="cmpStrings"/>
+            </columns>
+            <simplePagination/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="subStringTasksTable.create"/>
+                <button id="editBtn" action="subStringTasksTable.edit"/>
+                <button id="removeBtn" action="subStringTasksTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
