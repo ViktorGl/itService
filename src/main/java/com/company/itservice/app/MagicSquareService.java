@@ -52,6 +52,7 @@ public class MagicSquareService {
         return price;
     }
 
+// МЕТОДЫ ДЛЯ ОТЛАДКИ
 //    public int getPrice(int[] magic, int[] table) {
 //        int price = 0;
 //        for (int i = 0; i < 9; i++) {
@@ -88,14 +89,14 @@ public class MagicSquareService {
 
 //    @Override
 //    public String toString() {
-//        StringBuilder s = new StringBuilder("\nMagics: ");
+//        StringBuilder sb = new StringBuilder("\nMagics: ");
 //        for (int i = 0; i < 32; i++)
-//            s.append("\n")
+//            sb.append("\n")
 //                    .append(i)
 //                    .append(":\t ")
 //                    .append(Arrays.toString(magics[i]))
 //                    .append("   Type ")
 //                    .append(getMagicType(magics[i]));
-//        return s.toString();
+//        return sb.toString();
 //    }
 }

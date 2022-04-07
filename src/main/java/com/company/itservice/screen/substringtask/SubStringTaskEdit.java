@@ -1,22 +1,27 @@
 package com.company.itservice.screen.substringtask;
 
 import com.company.itservice.app.MagicSquareService;
+import com.company.itservice.app.SubStringService;
 import com.company.itservice.entity.MagicSquareTask;
 import io.jmix.ui.Dialogs;
 import io.jmix.ui.Notifications;
 import io.jmix.ui.UiComponents;
 import io.jmix.ui.component.*;
 import io.jmix.ui.download.Downloader;
+import io.jmix.ui.meta.PropertyType;
+import io.jmix.ui.meta.StudioProperty;
 import io.jmix.ui.screen.*;
 import com.company.itservice.entity.SubStringTask;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @UiController("SubStringTask.edit")
@@ -56,11 +61,11 @@ public class SubStringTaskEdit extends StandardEditor<SubStringTask> {
         } catch (IOException e) {
             throw new IllegalStateException("Ошибка чтения файла!");
         }
+        // Сообщение-инф. для отладки
         notifications.create()
                 .withCaption("File content")
                 .withDescription(text)
                 .show();
-
     }
 
     @Subscribe
@@ -70,41 +75,43 @@ public class SubStringTaskEdit extends StandardEditor<SubStringTask> {
 
     @Subscribe("calcBtn")
     public void onCalcBtnClick(Button.ClickEvent event) {
-        //String input = inputValueField.getValue();
-        //List<Integer> inpValues = parseInputData(input);
-        //if (inpValues != null) {
+        String sub = subStringsField.getValue();
+        //String[] sFinds = { "\" ,", " \","," \" ,"};
+        //SubStringService sss = new SubStringService();
+        //sub = sss.seachReplaceSubString(sub, sFinds);
+        //String[] subs = sub.split("\n,\n");
+
+
+        String cmp = cmpStringsField.getValue();
+        //cmp = sss.seachReplaceSubString(cmp, sFinds);
+        //String[] cmps = cmp.split("\n,\n");
+
+
+
+
+        resultField.clear();
+        if ((sub.length() > 0) && (cmp.length() > 0)) {
+            SubStringService subStringService = new SubStringService(sub, cmp);
+            String result = subStringService.calculate();
+            if(result.length() > 0)
         //    int[] res = magicSquareService.getMinPriceAndSquare(inpValues);
         //    resultField.setValue(res[0]);
         //    StringBuilder sb =  new StringBuilder(res[1]);
         //    for(int i=1; i <10; i++)
         //        if( i%3 == 0 ) sb.append(res[i]).append("\n");
         //        else sb.append(res[i]).append(" ");
-        //    outputValueField.setValue(sb.toString());
-        //}
+
+            if(result.length() > 0)     resultField.setInputPrompt(result);
+        }
     }
 
-    private List<Integer> parseInputData(String input) {
-        List<Integer> intValues = new ArrayList<>();
-        try {
-            String[] values = StringUtils.split(input, " \n");
-            if (values.length != 9) {
-                throw new IllegalStateException("Количество чисел должно быть равным 9, разделитель - пробел или перевод строки");
-            }
-            for (String value : values) {
-                intValues.add(Integer.parseInt(value));
-            }
-        } catch (Exception e) {
-            notifications.create(Notifications.NotificationType.ERROR)
-                    .withCaption("Ошибка парсинга данных")
-                    .withDescription(e.getMessage()).show();
-            return null;
-        }
-        return intValues;
-    }
+
 
     @Subscribe("btnDownload")
     public void onBtnDownloadClick(Button.ClickEvent event) {
         byte[] testOut = "wewewe".getBytes();
         downloader.download(testOut, "test.txt");
     }
+
+
 }
