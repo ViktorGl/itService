@@ -5,35 +5,34 @@ import java.util.Collections;
 import java.util.List;
 
 public class SubStringService {
+    // Данные из формы (от пользователя)
     private String srcSubString;
     private String tstString;
 
+    // Промежуточные данные
     private String[] subStrings;
     private String[] tstStrings;
 
-    public SubStringService(String subS, String tstS ) {
-        srcSubString = subS;
-        tstString    = tstS;
+    public SubStringService() {}
+
+    public SubStringService(String userSubString, String userTstString ) {
+        srcSubString = userSubString;
+        tstString    = userTstString;
     }
 
     public String calculate() {
-
-        // Преобразуем строку подстрок в массивы
         subStrings = userStringToArrayStrings( srcSubString );
         tstStrings = userStringToArrayStrings( tstString );
-
         List<String> list = new ArrayList<String>();
-        for(int i = 0; i < subStrings.length; i++ ) {
-            if (isContains(subStrings[i])) list.add(subStrings[i]);
-        }
+        for(int i = 0; i < subStrings.length; i++ )  if(isContains(subStrings[i])) list.add(subStrings[i]);
+
         String outString = "";
         if( !list.isEmpty() ) {
             Collections.sort(list);
-            // Формировать в СтрингБилдере!
-            outString = list.get(0);
-            for(int i = 1; i < list.size(); i++) {
-                outString = outString + ", " + list.get(i);
-            }
+            StringBuilder sb = new StringBuilder();
+            sb.append(list.get(0));
+            for (int i = 1; i < list.size(); i++) sb.append(", " + list.get(i));
+            outString = sb.toString();
         }
         return outString;
     }
@@ -55,7 +54,7 @@ public class SubStringService {
     }
 
     private String seachReplaceSubString(String s ) {
-        // Подстроки по условиям приведем к единообразию разделения на массив подстрок
+        // Подстроки по условиям приведем к единообразию для разделения на массив подстрок
         s = s.replace(" ,", "#");
         s = s.replace(" ,", "#");
         s = s.replace(", ", "#");

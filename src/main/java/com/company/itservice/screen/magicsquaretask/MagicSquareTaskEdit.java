@@ -2,9 +2,7 @@ package com.company.itservice.screen.magicsquaretask;
 
 import com.company.itservice.app.MagicSquareService;
 import com.company.itservice.entity.MagicSquareTask;
-import io.jmix.ui.Dialogs;
 import io.jmix.ui.Notifications;
-import io.jmix.ui.UiComponents;
 import io.jmix.ui.component.*;
 import io.jmix.ui.download.Downloader;
 import io.jmix.ui.screen.*;
@@ -23,6 +21,8 @@ import java.util.List;
 @EditedEntityContainer("magicSquareTaskDc")
 public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
     @Autowired
+    private DateField<LocalDateTime> dateField;
+    @Autowired
     private TextArea<String> inputValueField;
     @Autowired
     private TextArea<String> outputValueField;
@@ -34,27 +34,46 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
     private TextField<Integer> resultField;
     @Autowired
     private FileStorageUploadField dataFileField;
-    @Autowired
-    private Dialogs dialogs;
-    @Autowired
-    protected UiComponents uiComponents;
-    @Autowired
+     @Autowired
     private Downloader downloader;
+
 
     @Subscribe("dataFileField")
     public void onDataFileFieldFileUploadSucceed(SingleFileUploadField.FileUploadSucceedEvent event) {
-        InputStream fileContent = dataFileField.getFileContent();
+         InputStream fileContent = dataFileField.getFileContent();
         String text;
         try {
             text = new String(fileContent.readAllBytes(), StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new IllegalStateException("Ошибка чтения файла!");
         }
-        notifications.create()
-                .withCaption("File content")
-                .withDescription(text)
-                .show();
 
+        String str = text.toString();
+        String[] textArray = str.split("\n");
+
+        // Разобраться с кодировкой (кириллица)
+        String marker = textArray[0];
+        if(marker.contains("MAGICSQUARE")) {
+            dateField.setValue(LocalDateTime.parse(textArray[1]));
+            inputValueField.setValue( textArray[2] + "\n" + textArray[3] + "\n" + textArray[4]);
+            outputValueField.setValue(textArray[5] + "\n" + textArray[6] + "\n" + textArray[7]);
+        } else {
+            notifications.create()
+                    .withCaption("File content")
+                    .withDescription("Данные из файла не соответствуют текущей обработке (MAGICSQUARE)")
+                    .show();
+        };
+    }
+
+    @Subscribe("btnDownload")
+    public void onBtnDownloadClick(Button.ClickEvent event) {
+        StringBuilder sb = new StringBuilder("\"MAGICSQUARE\"");
+        sb.append("\n" + dateField.getValue());
+        sb.append("\n" + inputValueField.getValue());
+        sb.append("\n" + outputValueField.getValue());
+        String testOut = sb.toString();
+        byte[] btestOut = testOut.getBytes();;
+        downloader.download( btestOut, "square.txt");
     }
 
     @Subscribe
@@ -94,12 +113,6 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
             return null;
         }
         return intValues;
-    }
-
-    @Subscribe("btnDownload")
-    public void onBtnDownloadClick(Button.ClickEvent event) {
-        byte[] testOut = "wewewe".getBytes();
-        downloader.download(testOut, "test.txt");
     }
 
 }
