@@ -26,16 +26,6 @@ public class MagicSquareService {
         return outResult;
     }
 
-    public int getMinPrice(List<Integer> tstMagic) {
-        int[] input = toPrimitiveArray(tstMagic);
-        int minPrice = Integer.MAX_VALUE;
-        for (int j = 0; j < 32; j++) {
-            int price = getPrice(j, input);
-            if (minPrice > price) minPrice = price;
-        }
-        return minPrice;
-    }
-
     private int[] toPrimitiveArray(List<Integer> tstMagic) {
         int[] input = new int[9];
         for (int i = 0; i < input.length; i++) {
@@ -61,18 +51,16 @@ public class MagicSquareService {
 //        return price;
 //    }
 
-//    public MagicType getMagicType(int[] magic) {
+//    public String getMagicType getMagicType(int[] magic) {
 //        if ((magic[0] + magic[1] + magic[2] != 15)
 //                || (magic[3] + magic[4] + magic[5] != 15)
 //                || (magic[6] + magic[7] + magic[8] != 15)
 //
 //                || (magic[0] + magic[3] + magic[6] != 15)
 //                || (magic[1] + magic[4] + magic[7] != 15)
-//                || (magic[2] + magic[5] + magic[8] != 15)) return MagicType.MAGIC_NONE;
-//
-//        if (magic[4] == 5) return MagicType.MAGIC_FULL;
-//
-//        return MagicType.MAGIC_HALF;
+//                || (magic[2] + magic[5] + magic[8] != 15)) return "MAGIC_NONE";
+//        if (magic[4] == 5) return "MAGIC_FULL";
+//        return "MAGIC_HALF";
 //    }
 
 //    public void testDoubleMagic() {

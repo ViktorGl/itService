@@ -68,12 +68,5 @@ class MagicSquaresContainer {
         return magics;
     }
 
-    public int[][] getBaseMagics() {
-        return baseMagics;
-    }
-
-    public int[][] getFullMagics() {
-        return fullMagics;
-    }
 }
 

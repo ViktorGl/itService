@@ -3,14 +3,14 @@ package com.company.itservice.screen.substringtask;
 import com.company.itservice.app.SubStringService;
 import com.company.itservice.entity.SubStringTask;
 
-import io.jmix.ui.Dialogs;
 import io.jmix.ui.Notifications;
-import io.jmix.ui.UiComponents;
 import io.jmix.ui.component.*;
+
 import io.jmix.ui.download.Downloader;
 import io.jmix.ui.screen.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -28,19 +28,15 @@ public class SubStringTaskEdit extends StandardEditor<SubStringTask> {
     private TextArea<String> cmpStringsField;
 
     @Autowired
-    private DateField<LocalDateTime> dateField;
+    private DateField<@NotNull LocalDateTime> dateField;
 
     @Autowired
     private Notifications notifications;
 
     @Autowired
-    private TextField<Integer> resultField;
+    private TextField<String> resultField;
     @Autowired
     private FileStorageUploadField dataSubFileField;
-    @Autowired
-    private Dialogs dialogs;
-    @Autowired
-    protected UiComponents uiComponents;
     @Autowired
     private Downloader downloader;
 
@@ -55,21 +51,20 @@ public class SubStringTaskEdit extends StandardEditor<SubStringTask> {
         String cmp = cmpStringsField.getValue();
 
         resultField.clear();
-        if ((sub.length() > 0) && (cmp.length() > 0)) {
-            SubStringService subStringService = new SubStringService(sub, cmp);
-            String result = subStringService.calculate();
+        if ((sub != null) && (cmp != null) ) {
+            SubStringService subStringService = new SubStringService();
+            String result = subStringService.calculate(sub, cmp);
             if(result.length() > 0)     resultField.setInputPrompt(result);
         }
     }
 
     @Subscribe("btnDownload")
     public void onBtnDownloadClick(Button.ClickEvent event) {
-        StringBuilder sb = new StringBuilder("\"SUBSTRING\"");
-        sb.append("\n" + dateField.getValue());
-        sb.append("\n" + subStringsField.getValue());
-        sb.append("\n" + cmpStringsField.getValue());
-        String testOut = sb.toString();
-        byte[] btestOut = testOut.getBytes();;
+        String testOut = "\"SUBSTRING\"" + "\n" + dateField.getValue() +
+                "\n" + subStringsField.getValue() +
+                "\n" + cmpStringsField.getValue();
+
+        byte[] btestOut = testOut.getBytes();
         downloader.download( btestOut, "substr.txt");
     }
 
@@ -78,14 +73,15 @@ public class SubStringTaskEdit extends StandardEditor<SubStringTask> {
         InputStream fileContent = dataSubFileField.getFileContent();
         String text;
         try {
+            assert fileContent != null;
             text = new String(fileContent.readAllBytes(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new IllegalStateException("Ошибка чтения файла!");
+        } catch ( NullPointerException e ) {
+            throw new IllegalStateException("Ошибка чтения файла (NullPointerException)!");
+        } catch ( IOException e  ) {
+            throw new IllegalStateException("Ошибка чтения файла (IOException)!");
         }
 
-        String str = text.toString();
-        String[] textArray = str.split("\n");
-
+        String[] textArray = text.split("\n");
         // Разобраться с кодировкой (кириллица)
         String marker = textArray[0];
         if(marker.contains("SUBSTRING")) {
@@ -97,7 +93,7 @@ public class SubStringTaskEdit extends StandardEditor<SubStringTask> {
                 .withCaption("File content")
                 .withDescription("Данные из файла не соответствуют текущей обработке (SUBSTRING)")
                 .show();
-        };
+        }
     }
 
 }

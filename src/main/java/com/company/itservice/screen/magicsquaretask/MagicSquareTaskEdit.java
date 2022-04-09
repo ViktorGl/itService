@@ -89,9 +89,10 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
             int[] res = magicSquareService.getMinPriceAndSquare(inpValues);
             resultField.setValue(res[0]);
             StringBuilder sb =  new StringBuilder(res[1]);
-            for(int i=1; i <10; i++)
-                if( i%3 == 0 ) sb.append(res[i]).append("\n");
+            for(int i=1; i < 9; i++)
+                if(i%3 == 0) sb.append(res[i]).append("\n");
                 else sb.append(res[i]).append(" ");
+            sb.append(res[9]); // После последней цифры не нужны ни пробел ни "\n"
             outputValueField.setValue(sb.toString());
         }
     }
