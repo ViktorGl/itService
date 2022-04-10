@@ -27,19 +27,19 @@
     <layout spacing="true" expand="editActions">
         <form id="form" dataContainer="magicSquareTaskDc">
             <column width="350px">
-                <dateField id="dateField" property="date"/>
-                <textArea id="inputValueField" property="inputValue" rows="3"/>
-                <textArea id="outputValueField" property="outputValue" rows="3"/>
-                <textField id="resultField" property="result"/>
+                <dateField id="dateField" property="date" caption="Date and time"/>
+                <textArea id="inputValueField" property="inputValue" rows="3" caption="Tested square"/>
+                <textArea id="outputValueField" property="outputValue" rows="3" caption="Nearest square"/>
+                <textField id="resultField" property="result" caption="Result"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
             <button id="closeBtn" action="windowClose"/>
-            <button id="calcBtn" caption="Calculation"/>
+            <button id="calcBtn" caption="Calculate"/>
             <fileStorageUpload id="dataFileField" property="dataFile"
                                showFileName="false" showClearButton="false"/>
-            <button id="btnDownload" caption="Download"/>
+            <button id="btnDownload" caption="Export"/>
         </hbox>
     </layout>
 </window>

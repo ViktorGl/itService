@@ -29,7 +29,7 @@
             <column width="600px">
                 <dateField id="dateField" property="date"/>
                 <textArea  id="subStringsField" property="subStrings" rows="2"/>
-                <textArea  id="cmpStringsField" property="cmpStrings" rows="2"/>
+                <textArea  id="cmpStringsField" property="cmpStrings" rows="3"/>
                 <textField id="resultField" property="resultString"/>
              </column>
         </form>
@@ -39,7 +39,7 @@
             <button id="calcBtn" caption="msg://calculate"/>
             <fileStorageUpload id="dataSubFileField" property="dataSubFile"
                                showFileName="false" showClearButton="false"/>
-            <button id="btnDownload" caption="Download"/>
+            <button id="btnDownload" caption="Export"/>
         </hbox>
     </layout>
 </window>
