@@ -72,19 +72,36 @@ public class SubStringTaskEdit extends StandardEditor<SubStringTask> {
     public void onDataSubFileFieldFileUploadSucceed(SingleFileUploadField.FileUploadSucceedEvent event) {
         InputStream fileContent = dataSubFileField.getFileContent();
         String text;
+        //try {
+        //    assert fileContent != null;
+        //    text = new String(fileContent.readAllBytes(), StandardCharsets.UTF_8);
+        //} catch ( NullPointerException e ) {
+        //    throw new IllegalStateException("Ошибка чтения файла (NullPointerException)!");
+        //} catch ( IOException e  ) {
+        //    throw new IllegalStateException("Ошибка чтения файла (IOException)!");
+        //}
+
+        //String[] textArray = text.split("\n");
+
+
         try {
             assert fileContent != null;
-            text = new String(fileContent.readAllBytes(), StandardCharsets.UTF_8);
-        } catch ( NullPointerException e ) {
+            //text = new String(fileContent.readAllBytes(), StandardCharsets.UTF_8);
+            byte[] arr = fileContent.readAllBytes();
+            text = new String( arr );
+            //text = new String(fileContent.readAllBytes(), StandardCharsets.UTF_8);
+
+        } catch (IOException e) {
+            throw new IllegalStateException("Ошибка чтения файла!");
+        } catch (NullPointerException e) {
             throw new IllegalStateException("Ошибка чтения файла (NullPointerException)!");
-        } catch ( IOException e  ) {
-            throw new IllegalStateException("Ошибка чтения файла (IOException)!");
         }
 
         String[] textArray = text.split("\n");
+
+
         // Разобраться с кодировкой (кириллица)
-        String marker = textArray[0];
-        if(marker.contains("SUBSTRING")) {
+        if( textArray.length > 0 || textArray[0].contains("SUBSTRING") ) {
             dateField.setValue(LocalDateTime.parse(textArray[1]));
             subStringsField.setValue(textArray[2]);
             cmpStringsField.setValue(textArray[3]);

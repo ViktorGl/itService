@@ -40,29 +40,34 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
 
     @Subscribe("dataFileField")
     public void onDataFileFieldFileUploadSucceed(SingleFileUploadField.FileUploadSucceedEvent event) {
-         InputStream fileContent = dataFileField.getFileContent();
+        InputStream fileContent = dataFileField.getFileContent();
         String text;
         try {
-            text = new String(fileContent.readAllBytes(), StandardCharsets.UTF_8);
+            assert fileContent != null;
+            //text = new String(fileContent.readAllBytes(), StandardCharsets.UTF_8);
+            byte[] arr = fileContent.readAllBytes();
+            text = new String( arr );
+
+            //text = new String(fileContent.readAllBytes(), StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new IllegalStateException("Ошибка чтения файла!");
+        } catch (NullPointerException e) {
+            throw new IllegalStateException("Ошибка чтения файла (NullPointerException)!");
         }
 
-        String str = text.toString();
-        String[] textArray = str.split("\n");
+        String[] textArray = text.split("\n");
 
         // Разобраться с кодировкой (кириллица)
-        String marker = textArray[0];
-        if(marker.contains("MAGICSQUARE")) {
+        if( textArray.length > 0 || textArray[0].contains("MAGICSQUARE")) {
             dateField.setValue(LocalDateTime.parse(textArray[1]));
-            inputValueField.setValue( textArray[2] + "\n" + textArray[3] + "\n" + textArray[4]);
+            inputValueField.setValue(textArray[2] + "\n" + textArray[3] + "\n" + textArray[4]);
             outputValueField.setValue(textArray[5] + "\n" + textArray[6] + "\n" + textArray[7]);
         } else {
             notifications.create()
-                    .withCaption("File content")
-                    .withDescription("Данные из файла не соответствуют текущей обработке (MAGICSQUARE)")
-                    .show();
-        };
+            .withCaption("File content")
+            .withDescription("Данные из файла не соответствуют текущей обработке (MAGICSQUARE)")
+            .show();
+        }
     }
 
     @Subscribe("btnDownload")
@@ -72,7 +77,7 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
         sb.append("\n" + inputValueField.getValue());
         sb.append("\n" + outputValueField.getValue());
         String testOut = sb.toString();
-        byte[] btestOut = testOut.getBytes();;
+        byte[] btestOut = testOut.getBytes();
         downloader.download( btestOut, "square.txt");
     }
 
@@ -89,9 +94,10 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
             int[] res = magicSquareService.getMinPriceAndSquare(inpValues);
             resultField.setValue(res[0]);
             StringBuilder sb =  new StringBuilder(res[1]);
-            for(int i=1; i < 9; i++)
-                if(i%3 == 0) sb.append(res[i]).append("\n");
+            for(int i=1; i < 9; i++) {
+                if (i % 3 == 0) sb.append(res[i]).append("\n");
                 else sb.append(res[i]).append(" ");
+            }
             sb.append(res[9]); // После последней цифры не нужны ни пробел ни "\n"
             outputValueField.setValue(sb.toString());
         }
