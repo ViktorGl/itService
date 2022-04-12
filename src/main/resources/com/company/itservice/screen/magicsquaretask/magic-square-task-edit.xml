@@ -28,7 +28,7 @@
         <form id="form" dataContainer="magicSquareTaskDc">
             <column width="350px">
                 <dateField id="dateField" property="date" caption="Date and time"/>
-                <textArea id="inputValueField" property="inputValue" rows="3" caption="Tested square"/>
+                <textArea id="inputValueField" property="inputValue" rows="3" caption="msg://testedSquare"/>
                 <textArea id="outputValueField" property="outputValue" rows="3" caption="Nearest square"/>
                 <textField id="resultField" property="result" caption="Result"/>
             </column>
@@ -38,8 +38,8 @@
             <button id="closeBtn" action="windowClose"/>
             <button id="calcBtn" caption="Calculate"/>
             <fileStorageUpload id="dataFileField" property="dataFile"
-                               showFileName="false" showClearButton="false"/>
-            <button id="btnDownload" caption="Export"/>
+                               showFileName="false" showClearButton="false" caption="msg://upload"/>
+            <button id="btnDownload" caption="msg://export"/>
         </hbox>
     </layout>
 </window>
