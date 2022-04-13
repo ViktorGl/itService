@@ -1,7 +1,6 @@
 package com.company.itservice.screen.substringtask;
 
 import com.company.itservice.app.SubStringService;
-import com.company.itservice.entity.MagicSquareTask;
 import com.company.itservice.entity.SubStringTask;
 
 import io.jmix.ui.Notifications;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 @UiController("SubStringTask.edit")
@@ -76,9 +74,9 @@ public class SubStringTaskEdit extends StandardEditor<SubStringTask> {
         try {
              text = new String(fileContent.readAllBytes());
         } catch (IOException e) {
-            throw new IllegalStateException("Ошибка чтения файла!");
+            throw new IllegalStateException("Error reading data from file!");
         } catch (NullPointerException e) {
-            throw new IllegalStateException("Ошибка чтения файла (NullPointerException)!");
+            throw new IllegalStateException("Error reading file (NullPointerException)!");
         }
 
         String[] textArray = text.split("\n");
@@ -90,7 +88,7 @@ public class SubStringTaskEdit extends StandardEditor<SubStringTask> {
         } else {
             notifications.create()
                 .withCaption("File content")
-                .withDescription("Данные в выбранном файле не соответствуют текущей обработке")
+                .withDescription("The data from the file does not corresponded to the current processing")
                 .show();
         }
     }

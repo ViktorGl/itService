@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +43,9 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
         try {
             text = new String(fileContent.readAllBytes());
         } catch (IOException e) {
-            throw new IllegalStateException("Ошибка чтения файла!");
+            throw new IllegalStateException("Error reading data from file!");
         } catch (NullPointerException e) {
-            throw new IllegalStateException("Ошибка чтения файла (NullPointerException)!");
+            throw new IllegalStateException("Error reading file (NullPointerException)!");
         }
         String[] textArray = text.split("\n");
 
@@ -57,7 +56,7 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
         } else {
             notifications.create()
             .withCaption("File content")
-            .withDescription("Данные из файла не соответствуют текущей обработке")
+            .withDescription("The data from the file does not corresponded to the current procesing!")
             .show();
         }
     }
@@ -100,14 +99,15 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
         try {
             String[] values = StringUtils.split(input, " \n");
             if (values.length != 9) {
-                throw new IllegalStateException("Количество чисел должно быть равным 9, разделитель - пробел или перевод строки");
+                throw new IllegalStateException(
+                        "The number of numbers must be 9, the separator is a space or a line feed!");
             }
             for (String value : values) {
                 intValues.add(Integer.parseInt(value));
             }
         } catch (Exception e) {
             notifications.create(Notifications.NotificationType.ERROR)
-                    .withCaption("Ошибка парсинга данных")
+                    .withCaption("Data parsing error!")
                     .withDescription(e.getMessage()).show();
             return null;
         }
