@@ -74,8 +74,10 @@ public class SubStringTaskEdit extends StandardEditor<SubStringTask> {
         try {
              text = new String(fileContent.readAllBytes());
         } catch (IOException e) {
+            e.printStackTrace();
             throw new IllegalStateException("Error reading data from file!");
         } catch (NullPointerException e) {
+            e.printStackTrace();
             throw new IllegalStateException("Error reading file (NullPointerException)!");
         }
 

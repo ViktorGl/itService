@@ -43,12 +43,14 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
         try {
             text = new String(fileContent.readAllBytes());
         } catch (IOException e) {
+            e.printStackTrace();
             throw new IllegalStateException("Error reading data from file!");
         } catch (NullPointerException e) {
+            e.printStackTrace();
             throw new IllegalStateException("Error reading file (NullPointerException)!");
         }
-        String[] textArray = text.split("\n");
 
+        String[] textArray = text.split("\n");
         if( textArray.length >= 8 && textArray[0].contains("MAGICSQUARE")) {
             dateField.setValue(LocalDateTime.parse(textArray[1]));
             inputValueField.setValue(textArray[2] + "\n" + textArray[3] + "\n" + textArray[4]);
