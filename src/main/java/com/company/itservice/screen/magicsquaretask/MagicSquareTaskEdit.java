@@ -53,6 +53,7 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
             dateField.setValue(LocalDateTime.parse(textArray[1]));
             inputValueField.setValue(textArray[2] + "\n" + textArray[3] + "\n" + textArray[4]);
             outputValueField.setValue(textArray[5] + "\n" + textArray[6] + "\n" + textArray[7]);
+            resultField.clear();
         } else {
             notifications.create()
             .withCaption("File content")

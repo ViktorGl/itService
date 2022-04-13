@@ -80,11 +80,11 @@ public class SubStringTaskEdit extends StandardEditor<SubStringTask> {
         }
 
         String[] textArray = text.split("\n");
-
         if( textArray.length >= 4 && textArray[0].contains("SUBSTRING") ) {
             dateField.setValue(LocalDateTime.parse(textArray[1]));
             subStringsField.setValue(textArray[2]);
             cmpStringsField.setValue(textArray[3]);
+            resultField.setValue(" ");
         } else {
             notifications.create()
                 .withCaption("File content")
