@@ -37,35 +37,27 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
      @Autowired
     private Downloader downloader;
 
-
     @Subscribe("dataFileField")
     public void onDataFileFieldFileUploadSucceed(SingleFileUploadField.FileUploadSucceedEvent event) {
         InputStream fileContent = dataFileField.getFileContent();
         String text;
         try {
-            assert fileContent != null;
-            //text = new String(fileContent.readAllBytes(), StandardCharsets.UTF_8);
-            byte[] arr = fileContent.readAllBytes();
-            text = new String( arr );
-
-            //text = new String(fileContent.readAllBytes(), StandardCharsets.UTF_8);
+            text = new String(fileContent.readAllBytes());
         } catch (IOException e) {
             throw new IllegalStateException("Ошибка чтения файла!");
         } catch (NullPointerException e) {
             throw new IllegalStateException("Ошибка чтения файла (NullPointerException)!");
         }
-
         String[] textArray = text.split("\n");
 
-        // Разобраться с кодировкой (кириллица)
-        if( textArray.length > 0 || textArray[0].contains("MAGICSQUARE")) {
+        if( textArray.length >= 8 && textArray[0].contains("MAGICSQUARE")) {
             dateField.setValue(LocalDateTime.parse(textArray[1]));
             inputValueField.setValue(textArray[2] + "\n" + textArray[3] + "\n" + textArray[4]);
             outputValueField.setValue(textArray[5] + "\n" + textArray[6] + "\n" + textArray[7]);
         } else {
             notifications.create()
             .withCaption("File content")
-            .withDescription("Данные из файла не соответствуют текущей обработке (MAGICSQUARE)")
+            .withDescription("Данные из файла не соответствуют текущей обработке")
             .show();
         }
     }

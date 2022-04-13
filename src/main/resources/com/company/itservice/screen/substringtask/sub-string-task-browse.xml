@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://jmix.io/schema/ui/window"
-        xmlns:c="http://jmix.io/schema/ui/jpql-condition"
         caption="msg://subStringTaskBrowse.caption"
         focusComponent="subStringTasksTable">
     <data readOnly="true">
@@ -44,16 +43,16 @@
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
-                <column id="date"/>
-                <column id="subStrings"/>
-                <column id="cmpStrings"/>
+                <column id="date" caption="msg://DateAndTime"/>
+                <column id="subStrings" caption ="msg://subStrings"/>
+                <column id="cmpStrings" caption ="msg://testedStrings"/>
             </columns>
             <simplePagination/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
-                <button id="createBtn" action="subStringTasksTable.create" caption="Create"/>
-                <button id="editBtn" action="subStringTasksTable.edit" caption="Edit"/>
-                <button id="removeBtn" action="subStringTasksTable.remove" caption="Remove"/>
+                <button id="createBtn" action="subStringTasksTable.create" caption="msg://Create"/>
+                <button id="editBtn" action="subStringTasksTable.edit" caption="msg://Edit"/>
+                <button id="removeBtn" action="subStringTasksTable.remove" caption="msg://Remove"/>
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">
