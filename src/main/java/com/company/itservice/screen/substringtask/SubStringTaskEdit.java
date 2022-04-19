@@ -8,6 +8,7 @@ import io.jmix.ui.component.*;
 
 import io.jmix.ui.download.Downloader;
 import io.jmix.ui.screen.*;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.NotNull;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 @EditedEntityContainer("subStringTaskDc")
 public class SubStringTaskEdit extends StandardEditor<SubStringTask> {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(SubStringTaskEdit.class);
     @Autowired
     private TextArea<String> subStringsField;
 
@@ -69,16 +71,15 @@ public class SubStringTaskEdit extends StandardEditor<SubStringTask> {
 
     @Subscribe("dataSubFileField")
     public void onDataSubFileFieldFileUploadSucceed(SingleFileUploadField.FileUploadSucceedEvent event) {
-        InputStream fileContent = dataSubFileField.getFileContent();
         String text;
-        try {
-             text = new String(fileContent.readAllBytes());
+        try (InputStream fileContent = dataSubFileField.getFileContent()) {
+            text = new String(fileContent.readAllBytes());
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new IllegalStateException("Error reading data from file!");
+            log.error("Error reading data from file!", e);
+            throw new IllegalStateException();
         } catch (NullPointerException e) {
-            e.printStackTrace();
-            throw new IllegalStateException("Error reading file (NullPointerException)!");
+            log.error("Error reading file (NullPointerException)!", e);
+            throw new IllegalStateException();
         }
 
         String[] textArray = text.split("\n");

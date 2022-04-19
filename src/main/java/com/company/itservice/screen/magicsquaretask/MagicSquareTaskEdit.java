@@ -7,6 +7,7 @@ import io.jmix.ui.component.*;
 import io.jmix.ui.download.Downloader;
 import io.jmix.ui.screen.*;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.util.List;
 @UiDescriptor("magic-square-task-edit.xml")
 @EditedEntityContainer("magicSquareTaskDc")
 public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(MagicSquareTaskEdit.class);
     @Autowired
     private DateField<LocalDateTime> dateField;
     @Autowired
@@ -38,22 +40,21 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
 
     @Subscribe("dataFileField")
     public void onDataFileFieldFileUploadSucceed(SingleFileUploadField.FileUploadSucceedEvent event) {
-        InputStream fileContent = dataFileField.getFileContent();
         String text;
-        try {
-            text = new String(fileContent.readAllBytes());
+        try (InputStream fileContent = dataFileField.getFileContent()) {
+           text = new String(fileContent.readAllBytes());
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new IllegalStateException("Error reading data from file!");
+            log.error("Error reading data from file!", e);
+            throw new IllegalStateException();
         } catch (NullPointerException e) {
-            e.printStackTrace();
-            throw new IllegalStateException("Error reading file (NullPointerException)!");
+            log.error("Error reading file (NullPointerException)!", e);
+            throw new IllegalStateException();
         }
 
         String[] textArray = text.split("\n");
         if( textArray.length >= 8 && textArray[0].contains("MAGICSQUARE")) {
             dateField.setValue(LocalDateTime.parse(textArray[1]));
-            inputValueField.setValue(textArray[2] + "\n" + textArray[3] + "\n" + textArray[4]);
+            inputValueField.setValue(textArray[2]  + "\n" + textArray[3] + "\n" + textArray[4]);
             outputValueField.setValue(textArray[5] + "\n" + textArray[6] + "\n" + textArray[7]);
             resultField.clear();
         } else {
@@ -66,11 +67,10 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
 
     @Subscribe("btnDownload")
     public void onBtnDownloadClick(Button.ClickEvent event) {
-        StringBuilder sb = new StringBuilder("\"MAGICSQUARE\"");
-        sb.append("\n" + dateField.getValue());
-        sb.append("\n" + inputValueField.getValue());
-        sb.append("\n" + outputValueField.getValue());
-        String testOut = sb.toString();
+        String testOut = "\"MAGICSQUARE\""   + "\n"
+                + dateField.getValue()       + "\n"
+                + inputValueField.getValue() + "\n"
+                + outputValueField.getValue();
         byte[] btestOut = testOut.getBytes();
         downloader.download( btestOut, "square.txt");
     }
