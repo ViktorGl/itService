@@ -71,18 +71,19 @@ public class SubStringTaskEdit extends StandardEditor<SubStringTask> {
 
     @Subscribe("dataSubFileField")
     public void onDataSubFileFieldFileUploadSucceed(SingleFileUploadField.FileUploadSucceedEvent event) {
+
         String text;
         try (InputStream fileContent = dataSubFileField.getFileContent()) {
             text = new String(fileContent.readAllBytes());
-        } catch (IOException e) {
+        } catch ( IOException | NullPointerException e ){
             log.error("Error reading data from file!", e);
-            throw new IllegalStateException();
-        } catch (NullPointerException e) {
-            log.error("Error reading file (NullPointerException)!", e);
-            throw new IllegalStateException();
+            notifications.create(Notifications.NotificationType.ERROR)
+                    .withCaption("Error reading data from file!")
+                    .withDescription(e.getMessage()).show();
+            return;
         }
 
-        String[] textArray = text.split("\n");
+  String[] textArray = text.split("\n");
         if( textArray.length >= 4 && textArray[0].contains("SUBSTRING") ) {
             dateField.setValue(LocalDateTime.parse(textArray[1]));
             subStringsField.setValue(textArray[2]);

@@ -2,6 +2,7 @@ package com.company.itservice.screen.magicsquaretask;
 
 import com.company.itservice.app.MagicSquareService;
 import com.company.itservice.entity.MagicSquareTask;
+
 import io.jmix.ui.Notifications;
 import io.jmix.ui.component.*;
 import io.jmix.ui.download.Downloader;
@@ -42,13 +43,13 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
     public void onDataFileFieldFileUploadSucceed(SingleFileUploadField.FileUploadSucceedEvent event) {
         String text;
         try (InputStream fileContent = dataFileField.getFileContent()) {
-           text = new String(fileContent.readAllBytes());
-        } catch (IOException e) {
+          text = new String(fileContent.readAllBytes());
+        } catch ( IOException | NullPointerException e ){
             log.error("Error reading data from file!", e);
-            throw new IllegalStateException();
-        } catch (NullPointerException e) {
-            log.error("Error reading file (NullPointerException)!", e);
-            throw new IllegalStateException();
+            notifications.create(Notifications.NotificationType.ERROR)
+                    .withCaption("Error reading data from file!")
+                    .withDescription(e.getMessage()).show();
+            return;
         }
 
         String[] textArray = text.split("\n");
