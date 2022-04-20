@@ -71,7 +71,6 @@ public class SubStringTaskEdit extends StandardEditor<SubStringTask> {
 
     @Subscribe("dataSubFileField")
     public void onDataSubFileFieldFileUploadSucceed(SingleFileUploadField.FileUploadSucceedEvent event) {
-
         String text;
         try (InputStream fileContent = dataSubFileField.getFileContent()) {
             text = new String(fileContent.readAllBytes());

@@ -42,6 +42,7 @@ public class MagicSquareTaskEdit extends StandardEditor<MagicSquareTask> {
     @Subscribe("dataFileField")
     public void onDataFileFieldFileUploadSucceed(SingleFileUploadField.FileUploadSucceedEvent event) {
         String text;
+
         try (InputStream fileContent = dataFileField.getFileContent()) {
           text = new String(fileContent.readAllBytes());
         } catch ( IOException | NullPointerException e ){
